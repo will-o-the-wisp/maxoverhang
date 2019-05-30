@@ -25,6 +25,9 @@ class Block:
 block1 = Block(50,50,100,50)
 def setup():
     size(1000,800)
+    size(1000,700)
+
+
 def draw():
     global holding
     global relX
@@ -53,4 +56,3 @@ def mousePressed():
 def mouseReleased():
     global mp
     mp = False
-    
