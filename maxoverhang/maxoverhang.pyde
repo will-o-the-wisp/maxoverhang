@@ -3,15 +3,15 @@ mp = False
 relX=0
 relY=0
 class Block:
-    def __init__(self,x,y,h,w):
+    def __init__(self,x,y,h,w,ax,ay):
         self.x=x
         self.y=y
         self.h=h
         self.w=w
         self.vx=0
         self.vy=0
-        self.ax=0
-        self.ay=0
+        self.ax=ax
+        self.ay=ay
     def display(self):
         rect(self.x,self.y,self.w,self.h)
     def inBlock(self,x,y):
@@ -20,9 +20,12 @@ class Block:
         self.x=x
         self.y=y
     def move(self):
-        
+        self.vx+=self.ax
+        self.vy+=self.ay
+        self.x+=self.vx
+        self.y+=self.vy
     
-block1 = Block(50,50,100,50)
+block1 = Block(50,50,100,50,0,0)
 def setup():
     size(1000,800)
     size(1000,700)
