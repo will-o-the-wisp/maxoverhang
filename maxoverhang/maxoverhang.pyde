@@ -6,7 +6,7 @@ comdisplay = False
 forcedisplay = False
 add = False
 class Block:
-    def __init__(self,x,y,h,w,ax,ay):
+    def __init__(self,x,y,w,h,ax,ay):
         self.x=x
         self.y=y
         self.h=h
@@ -17,6 +17,8 @@ class Block:
         self.ay=ay
     def display(self):
         fill(255)
+        if(self.touchRect(0,600,500,50)):
+            fill(255,0,0)
         rect(self.x,self.y,self.w,self.h)
         if(comdisplay):
             fill(0)
@@ -31,23 +33,17 @@ class Block:
         self.vy+=self.ay
         self.x+=self.vx
         self.y+=self.vy
+    def touchRect(self,x,y,w,h):
+        return (self.x+self.w>=x and self.x <= x+w and self.y + self.h >= y and self.y <= y + h)
         
-class Tab:
-    def __init__(self, c, xpos, ypos):
-        self.c = color (101,67,33)
-        self.xpos = width/2
-        self.ypos = height/2
-    def display(self):
-        fill(self.c)
-        rect(xpos, ypos, 50, 100)
 
 
-blocks = [Block(50,50,100,200,0,0),Block(200,50,100,200,0,0)]
+blocks = [Block(50,50,200,100,0,0),Block(200,50,200,100,0,0)]
 block1=blocks[0]
 #block2=blocks[1]
-block3=Block(400,50,200,100,0,0)
+#block3=Block(400,50,200,100,0,0)
 def setup():
-    size(1000,800)
+    size(1400,800)
     background(190)
 
 
@@ -87,7 +83,7 @@ def draw():
         fill(255,0,0)
         ellipse(xcom,ycom,10,10)
     if(add):
-        blocks.append(Block(mouseX-100,mouseY-50,100,200,0,0))
+        blocks.append(Block(mouseX-100,mouseY-50,200,100,0,0))
         add = False
     
 def keyPressed():
