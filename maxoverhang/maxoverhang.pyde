@@ -17,7 +17,7 @@ class Block:
         self.ay=ay
     def display(self):
         fill(255)
-        if(self.touchRect(0,600,500,50)):
+        if(self.touchRect(0,600,500,50) or touching[blocks.index(self)]):
             fill(255,0,0)
         rect(self.x,self.y,self.w,self.h)
         if(comdisplay):
@@ -38,7 +38,8 @@ class Block:
         
 
 
-blocks = [Block(50,50,200,100,0,0),Block(200,50,200,100,0,0)]
+blocks = [Block(50,50,200,100,0,0),Block(400,50,200,100,0,0)]
+touching = [False,False]
 block1=blocks[0]
 #block2=blocks[1]
 #block3=Block(400,50,200,100,0,0)
@@ -46,8 +47,8 @@ def setup():
     size(1400,800)
     background(190)
 
-
 def draw():
+    global touching
     global add
     global holding
     global relX
@@ -63,6 +64,14 @@ def draw():
     for b in blocks:
         b.move()
         b.display()
+    for i in range(len(touching)):
+        touching[i]=False
+    for i in range(len(blocks)):
+        for j in range(i+1,len(blocks)):
+            blj = blocks[j]
+            if blocks[i].touchRect(blj.x,blj.y,blj.w,blj.h):
+                touching[i]=True
+                touching[j]=True
     if holding > -1:
         blocks[holding].setpos(mouseX-relX,mouseY-relY)
         if not mp:
@@ -84,6 +93,7 @@ def draw():
         ellipse(xcom,ycom,10,10)
     if(add):
         blocks.append(Block(mouseX-100,mouseY-50,200,100,0,0))
+        touching.append(False)
         add = False
     
 def keyPressed():
