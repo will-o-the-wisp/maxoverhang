@@ -1,7 +1,10 @@
-holding = False #holding block
-mp = False #mousepressed, might change later
+holding = -1
+mp = False
 relX=0
 relY=0
+comdisplay = False
+forcedisplay = False
+add = False
 class Block:
     def __init__(self,x,y,h,w,ax,ay):
         self.x=x
@@ -15,6 +18,9 @@ class Block:
     def display(self):
         fill(255)
         rect(self.x,self.y,self.w,self.h)
+        if(comdisplay):
+            fill(0)
+            ellipse(self.x+self.w/2.0,self.y+self.h/2.0,10,10)
     def inBlock(self,x,y):
         return (x>=self.x and x<=self.x+self.w and y>=self.y and y<=self.y+self.h)
     def setpos(self,x,y):
@@ -25,9 +31,7 @@ class Block:
         self.vy+=self.ay
         self.x+=self.vx
         self.y+=self.vy
-    
-block1 = Block(50,50,50,100,0,0)
-
+        
 class Tab:
     def __init__(self, c, xpos, ypos):
         self.c = color (101,67,33)
@@ -36,36 +40,68 @@ class Tab:
     def display(self):
         fill(self.c)
         rect(xpos, ypos, 50, 100)
-    
+
+        
+blocks = [Block(50,50,100,200,0,0),Block(200,50,100,200,0,0)]
+block1=blocks[0]
+#block2=blocks[1]
+block3=Block(400,50,200,100,0,0)
 def setup():
     size(1000,800)
     background(190)
 
+
 def draw():
+    global add
     global holding
     global relX
     global relY
     global mp
-    background (190)
+    global blocks
+    global blocks2
+    background(190)
     fill(101,67,33)
     rect(0,600,500,50)
     noStroke()
     rect(400,600,50,300)
-    block1.move()
-    block1.display()
-    if holding == True:
-        print(mp)
-        block1.setpos(mouseX-relX,mouseY-relY)
-        if mp == False:
-            holding = False
-    if mp and block1.inBlock(mouseX,mouseY) and not holding:
-        holding = True
-        relX = mouseX-block1.x
-        relY=mouseY-block1.y
-        #block1.setpos(mouseX,mouseY)
-    print(mp,holding)
-
+    for b in blocks:
+        b.move()
+        b.display()
+    if holding > -1:
+        blocks[holding].setpos(mouseX-relX,mouseY-relY)
+        if not mp:
+            holding = -1
+    for b in blocks:
+        if mp and b.inBlock(mouseX,mouseY) and holding==-1:
+            holding = blocks.index(b)
+            relX=mouseX-b.x
+            relY=mouseY-b.y
+    if(comdisplay):
+        xcom = 0
+        ycom = 0
+        for b in blocks:
+            xcom+=b.x+b.w/2.0
+            ycom+=b.y+b.h/2.0
+        xcom/=(1.0*len(blocks))
+        ycom/=(1.0*len(blocks))
+        fill(255,0,0)
+        ellipse(xcom,ycom,10,10)
+    if(add):
+        blocks.append(Block(mouseX-100,mouseY-50,100,200,0,0))
+        add = False
     
+def keyPressed():
+    global comdisplay
+    global add
+    if(key=='c'):
+        comdisplay = True
+    if(key=='a'):
+        add = True
+def keyReleased():
+    global comdisplay
+    if(key=='c'):
+        comdisplay = False
+
 def mousePressed():
     global mp
     mp = True
