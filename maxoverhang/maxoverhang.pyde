@@ -41,7 +41,7 @@ class Tab:
         fill(self.c)
         rect(xpos, ypos, 50, 100)
 
-        
+
 blocks = [Block(50,50,100,200,0,0),Block(200,50,100,200,0,0)]
 block1=blocks[0]
 #block2=blocks[1]
