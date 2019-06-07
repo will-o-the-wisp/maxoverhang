@@ -38,7 +38,7 @@ class Block:
         
 
 
-blocks = [Block(50,50,200,100,0,0),Block(400,50,200,100,0,0)]
+blocks = [Block(50,50,200,100,0.00,0),Block(400,50,80,50,-0.00,0)]
 touching = [False,False]
 block1=blocks[0]
 #block2=blocks[1]
@@ -64,14 +64,7 @@ def draw():
     for b in blocks:
         b.move()
         b.display()
-    for i in range(len(touching)):
-        touching[i]=False
-    for i in range(len(blocks)):
-        for j in range(i+1,len(blocks)):
-            blj = blocks[j]
-            if blocks[i].touchRect(blj.x,blj.y,blj.w,blj.h):
-                touching[i]=True
-                touching[j]=True
+   
     if holding > -1:
         blocks[holding].setpos(mouseX-relX,mouseY-relY)
         if not mp:
@@ -95,7 +88,23 @@ def draw():
         blocks.append(Block(mouseX-100,mouseY-50,200,100,0,0))
         touching.append(False)
         add = False
-    
+    for i in range(len(touching)):
+        touching[i]=False
+    for i in range(len(blocks)):
+        for j in filter(lambda x: x>i,range(len(blocks))):
+            bli = blocks[i]
+            blj = blocks[j]
+            if bli.touchRect(blj.x,blj.y,blj.w,blj.h):
+                if bli.y+bli.h>blj.y:
+                    blj.y=bli.y+bli.h
+                if bli.x+bli.w>blj.x:
+                    bli.x=blj.x-bli.w
+                if blj.x+blj.w>bli.x:
+                    blj.x=bli.x-blj.w
+                if blj.y+blj.h>bli.y:
+                    blj.y=bli.y-blj.h
+                touching[i]=True
+                touching[j]=True
 def keyPressed():
     global comdisplay
     global add
