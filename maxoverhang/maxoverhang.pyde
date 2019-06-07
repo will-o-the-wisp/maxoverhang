@@ -15,12 +15,25 @@ class Block:
         self.vy=0
         self.ax=ax
         self.ay=ay
+        cx=self.x+self.w/2.0
+        cy=self.y+self.h/2.0
+    def createArrow(self,cx,cy):
+        arrow = createShape(GROUP)
+        head = createShape(TRIANGLE, cx-10, cy-20, cx+10, cy-20, cx, cy-30)
+        head.setFill(color(0))
+        body = createShape(RECT, cx-5, cy, 7, 20)
+        body.setFill(color(0))
+        arrow.addChild(body)
+        arrow.addChild(head)
+            
     def display(self):
         fill(255)
         rect(self.x,self.y,self.w,self.h)
+        cx=self.x+self.w/2.0
+        cy=self.y+self.h/2.0
         if(comdisplay):
             fill(0)
-            ellipse(self.x+self.w/2.0,self.y+self.h/2.0,10,10)
+            ellipse(cx,cy,10,10)
     def inBlock(self,x,y):
         return (x>=self.x and x<=self.x+self.w and y>=self.y and y<=self.y+self.h)
     def setpos(self,x,y):
@@ -31,25 +44,16 @@ class Block:
         self.vy+=self.ay
         self.x+=self.vx
         self.y+=self.vy
-        
-class Tab:
-    def __init__(self, c, xpos, ypos):
-        self.c = color (101,67,33)
-        self.xpos = width/2
-        self.ypos = height/2
-    def display(self):
-        fill(self.c)
-        rect(xpos, ypos, 50, 100)
-
 
 blocks = [Block(50,50,100,200,0,0),Block(200,50,100,200,0,0)]
 block1=blocks[0]
 #block2=blocks[1]
 block3=Block(400,50,200,100,0,0)
+
+
 def setup():
     size(1000,800)
     background(190)
-
 
 def draw():
     global add
@@ -79,16 +83,20 @@ def draw():
     if(comdisplay):
         xcom = 0
         ycom = 0
-        for b in blocks:
-            xcom+=b.x+b.w/2.0
-            ycom+=b.y+b.h/2.0
+        
         xcom/=(1.0*len(blocks))
         ycom/=(1.0*len(blocks))
         fill(255,0,0)
         ellipse(xcom,ycom,10,10)
+    for b in blocks:
+            xcom+=b.x+b.w/2.0
+            ycom+=b.y+b.h/2.0
+            b.createArrow(xcom, ycom)    
     if(add):
         blocks.append(Block(mouseX-100,mouseY-50,100,200,0,0))
         add = False
+        
+
     
 def keyPressed():
     global comdisplay
