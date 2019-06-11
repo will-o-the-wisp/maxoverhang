@@ -5,6 +5,7 @@ relY=0
 comdisplay = False
 forcedisplay = False
 add = False
+checkbal = False
 class Block:
     def __init__(self,x,y,w,h,ax,ay):
         self.x=x
@@ -38,7 +39,7 @@ class Block:
         
 
 
-blocks = [Block(50,50,200,100,0.00,0),Block(400,50,80,50,-0.00,0)]
+blocks = [Block(50,50,200,100,0.00,-.00),Block(400,50,80,50,-0.00,0)]
 touching = [False,False]
 block1=blocks[0]
 #block2=blocks[1]
@@ -66,7 +67,7 @@ def draw():
         b.display()
    
     if holding > -1:
-        blocks[holding].setpos(mouseX-relX,mouseY-relY)
+        blocks[holding].setpos(mouseX-relX,blocks[holding].y)
         if not mp:
             holding = -1
     for b in blocks:
@@ -74,14 +75,18 @@ def draw():
             holding = blocks.index(b)
             relX=mouseX-b.x
             relY=mouseY-b.y
+ 
+    xcom = 0
+    ycom = 0
+    for b in blocks:
+        xcom+=b.x+b.w/2.0
+        ycom+=b.y+b.h/2.0
+    xcom/=(1.0*len(blocks))
+    ycom/=(1.0*len(blocks))
+    if(xcom>500):
+        textSize(40)
+        text("fail",500,500)
     if(comdisplay):
-        xcom = 0
-        ycom = 0
-        for b in blocks:
-            xcom+=b.x+b.w/2.0
-            ycom+=b.y+b.h/2.0
-        xcom/=(1.0*len(blocks))
-        ycom/=(1.0*len(blocks))
         fill(255,0,0)
         ellipse(xcom,ycom,10,10)
     if(add):
@@ -95,23 +100,27 @@ def draw():
             bli = blocks[i]
             blj = blocks[j]
             if bli.touchRect(blj.x,blj.y,blj.w,blj.h):
-                if bli.y+bli.h>blj.y:
-                    blj.y=bli.y+bli.h
-                if bli.x+bli.w>blj.x:
-                    bli.x=blj.x-bli.w
-                if blj.x+blj.w>bli.x:
-                    blj.x=bli.x-blj.w
-                if blj.y+blj.h>bli.y:
-                    blj.y=bli.y-blj.h
                 touching[i]=True
                 touching[j]=True
+                #if bli.x+bli.w>blj.x:
+                 #   bli.x=blj.x-bli.w
+                """if bli.y+bli.h>blj.y:
+                    blj.y=bli.y+bli.h
+                if blj.y+blj.h>bli.y:
+                    blj.y=bli.y-blj.h"""
+               # if blj.x+blj.w>bli.x:
+                #    blj.x=bli.x-blj.w
+                
 def keyPressed():
     global comdisplay
     global add
+    global checkbal
     if(key=='c'):
         comdisplay = True
     if(key=='a'):
         add = True
+    if(key=='g'):
+        checkbal = True
 def keyReleased():
     global comdisplay
     if(key=='c'):
