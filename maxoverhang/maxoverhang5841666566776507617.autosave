@@ -6,7 +6,7 @@ comdisplay = False
 forcedisplay = False
 add = False
 class Block:
-    def __init__(self,x,y,w,h,ax,ay):
+    def __init__(self,x,y,h,w,ax,ay):
         self.x=x
         self.y=y
         self.h=h
@@ -15,8 +15,8 @@ class Block:
         self.vy=0
         self.ax=ax
         self.ay=ay
-        cx=self.x+self.w/2.0
-        cy=self.y+self.h/2.0
+        #cx=self.x+self.w/2.0
+        #cy=self.y+self.h/2.0
     def createArrow(self,cx,cy):
         arrow = createShape(GROUP)
         head = createShape(TRIANGLE, cx-10, cy-20, cx+10, cy-20, cx, cy-30)
@@ -28,8 +28,6 @@ class Block:
             
     def display(self):
         fill(255)
-        if(self.touchRect(0,600,500,50) or touching[blocks.index(self)]):
-            fill(255,0,0)
         rect(self.x,self.y,self.w,self.h)
         cx=self.x+self.w/2.0
         cy=self.y+self.h/2.0
@@ -46,23 +44,18 @@ class Block:
         self.vy+=self.ay
         self.x+=self.vx
         self.y+=self.vy
-    def touchRect(self,x,y,w,h):
-        return (self.x+self.w>=x and self.x <= x+w and self.y + self.h >= y and self.y <= y + h)
 
-blocks = [Block(50,50,200,100,0.00,0),Block(400,50,80,50,-0.00,0)]
-touching = [False,False]
+blocks = [Block(50,50,100,200,0,0),Block(200,50,100,200,0,0)]
 block1=blocks[0]
 #block2=blocks[1]
 block3=Block(400,50,200,100,0,0)
 
-#block3=Block(400,50,200,100,0,0)
 
 def setup():
-    size(1400,800)
+    size(1000,800)
     background(190)
 
 def draw():
-    global touching
     global add
     global holding
     global relX
@@ -78,7 +71,6 @@ def draw():
     for b in blocks:
         b.move()
         b.display()
-   
     if holding > -1:
         blocks[holding].setpos(mouseX-relX,mouseY-relY)
         if not mp:
@@ -88,39 +80,26 @@ def draw():
             holding = blocks.index(b)
             relX=mouseX-b.x
             relY=mouseY-b.y
+
+    xcom = 0
+    ycom = 0
+    for b in blocks:
+        xcom+=b.x+b.w/2.0
+        ycom+=b.y+b.h/2.0    
+        b.createArrow(b.x+b.w/2.0,b.y+b.h/2.0) 
+        
+    xcom/=(1.0*len(blocks))
+    ycom/=(1.0*len(blocks))
     if(comdisplay):
-        xcom = 0
-        ycom = 0        
-        for b in blocks:
-            xcom+=b.x+b.w/2.0
-            ycom+=b.y+b.h/2.0
-            b.createArrow(xcom,ycom)  
-        xcom/=(1.0*len(blocks))
-        ycom/=(1.0*len(blocks))
         fill(255,0,0)
         ellipse(xcom,ycom,10,10)
+      
     if(add):
-        blocks.append(Block(mouseX-100,mouseY-50,200,100,0,0))
-        touching.append(False)
+        blocks.append(Block(mouseX-100,mouseY-50,100,200,0,0))
         add = False
-    for i in range(len(touching)):
-        touching[i]=False
-    for i in range(len(blocks)):
-        for j in filter(lambda x: x>i,range(len(blocks))):
-            bli = blocks[i]
-            blj = blocks[j]
-            if bli.touchRect(blj.x,blj.y,blj.w,blj.h):
-                if bli.y+bli.h>blj.y:
-                    blj.y=bli.y+bli.h
-                if bli.x+bli.w>blj.x:
-                    bli.x=blj.x-bli.w
-                if blj.x+blj.w>bli.x:
-                    blj.x=bli.x-blj.w
-                if blj.y+blj.h>bli.y:
-                    blj.y=bli.y-blj.h
-                touching[i]=True
-                touching[j]=True
+        
 
+    
 def keyPressed():
     global comdisplay
     global add
@@ -128,7 +107,6 @@ def keyPressed():
         comdisplay = True
     if(key=='a'):
         add = True
-
 def keyReleased():
     global comdisplay
     if(key=='c'):
