@@ -77,7 +77,6 @@ def draw():
     for b in blocks:
         b.move()
         b.display()
-        print(b.inBlock(mouseX,mouseY))
     if holding > -1:
         blocks[holding].setpos(mouseX-relX,blocks[holding].y)
         if not mp:
@@ -104,7 +103,7 @@ def draw():
         if(b.x+b.w/2.0<=blocks[i-1].x  or b.x+b.w/2.0>=blocks[i-1].x+bw):
             textSize(40)
             fill(0)
-            text("indiv com fail",1100,500)
+            text("indiv com fail "+str(i),1100,500)
     if(comdisplay):
         fill(255,0,0)
         ellipse(xcom,ycom,10,10)
