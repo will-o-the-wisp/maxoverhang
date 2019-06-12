@@ -74,7 +74,6 @@ def draw():
     rect(0,600,500,50)
     noStroke()
     rect(400,600,50,300)
-    print(holding)
     for b in blocks:
         b.move()
         b.display()
@@ -99,7 +98,13 @@ def draw():
     if(xcom>500):
         textSize(40)
         fill(0)
-        text("fail",1300,100)
+        text("total com fail",1100,100)
+    for i in range(1,len(blocks)):
+        b=blocks[i]
+        if(b.x+b.w/2.0<=blocks[i-1].x  or b.x+b.w/2.0>=blocks[i-1].x+bw):
+            textSize(40)
+            fill(0)
+            text("indiv com fail",1100,500)
     if(comdisplay):
         fill(255,0,0)
         ellipse(xcom,ycom,10,10)
