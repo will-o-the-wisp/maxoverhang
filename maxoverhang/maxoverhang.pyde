@@ -74,13 +74,15 @@ def draw():
     rect(0,600,500,50)
     noStroke()
     rect(400,600,50,300)
+    print(holding)
     for b in blocks:
         b.move()
         b.display()
+        print(b.inBlock(mouseX,mouseY))
     if holding > -1:
+        blocks[holding].setpos(mouseX-relX,blocks[holding].y)
         if not mp:
             holding = -1
-    print(blocks)
     for b in blocks:
         if mp and b.inBlock(mouseX,mouseY) and holding==-1:
             holding = blocks.index(b)
