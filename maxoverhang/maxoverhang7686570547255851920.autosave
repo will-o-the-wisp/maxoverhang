@@ -4,13 +4,12 @@ relX=0
 relY=0
 comdisplay = False
 forcedisplay = False
-counter=0
 add = False #adding blocks
 sub = False #subtracting blocks
-checkbal = False #checking com
-bw=100 #block width
-bh=50 #block height
-bn=0 #block number
+checkbal = False #checking coms
+bw=100
+bh=50
+bn=0
 
 
 class Block:
@@ -54,7 +53,7 @@ blocks = []
 touching = [False,False]
 #block1=blocks[0]
 #block2=blocks[1]
-block3=Block(400,50,200,100,0,0)
+#block3=Block(400,50,200,100,0,0)
 
 #block3=Block(400,50,200,100,0,0)
 
@@ -86,9 +85,9 @@ def draw():
         b.move()
         b.display()
     if holding > -1:
-        blocks[holding].setpos(mouseX-relX,blocks[holding].y)
         if not mp:
             holding = -1
+    print(blocks)
     for b in blocks:
         if mp and b.inBlock(mouseX,mouseY) and holding==-1:
             holding = blocks.index(b)
@@ -97,20 +96,19 @@ def draw():
     xcom = 0
     ycom = 0
     for b in blocks:
-        counter = b.x - 400
-    for b in blocks:
         xcom+=b.x+b.w/2.0
         ycom+=b.y+b.h/2.0
     if len(blocks)>0:
         xcom/=(1.0*len(blocks))
         ycom/=(1.0*len(blocks))
+
     if(len(blocks)>0):
         xcom/=(1.0*len(blocks))
         ycom/=(1.0*len(blocks))
     if(xcom>500):
         textSize(40)
         fill(0)
-        text("fail",1300,200)
+        text("fail",1300,100)
     if(comdisplay):
         xcom = 0
         ycom = 0        
@@ -159,11 +157,11 @@ def draw():
                     blj.y=bli.y-blj.
                # if blj.x+blj.w>bli.x:
                 #    blj.x=bli.x-blj.w
+<<<<<<< HEAD
 
+
+=======
         """
-    textSize(40)
-    fill(0)
-    text("max overhang:",1000,100)
 
 def keyPressed():
     global comdisplay
