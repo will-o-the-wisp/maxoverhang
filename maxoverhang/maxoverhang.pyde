@@ -5,7 +5,13 @@ relY=0
 comdisplay = False
 forcedisplay = False
 add = False
+sub = False
 checkbal = False
+bw=100
+bh=50
+bn=0
+
+
 class Block:
     def __init__(self,x,y,w,h,ax,ay):
         self.x=x
@@ -18,8 +24,8 @@ class Block:
         self.ay=ay
     def display(self):
         fill(255)
-        if(self.touchRect(0,600,500,50) or touching[blocks.index(self)]):
-            fill(255,0,0)
+        #if(self.touchRect(0,600,500,50) or touching[blocks.index(self)]):
+            #fill(255,0,0)
         rect(self.x,self.y,self.w,self.h)
         if(comdisplay):
             fill(0)
@@ -39,11 +45,15 @@ class Block:
         
 
 
-blocks = [Block(50,50,200,100,0.00,-.00),Block(400,50,80,50,-0.00,0)]
+blocks = []
 touching = [False,False]
-block1=blocks[0]
+#block1=blocks[0]
 #block2=blocks[1]
 #block3=Block(400,50,200,100,0,0)
+def clear():
+    global blocks
+    blocks=[]
+
 def setup():
     size(1400,800)
     background(190)
@@ -57,6 +67,8 @@ def draw():
     global mp
     global blocks
     global blocks2
+    global sub
+    global bn
     background(190)
     fill(101,67,33)
     rect(0,600,500,50)
@@ -65,7 +77,6 @@ def draw():
     for b in blocks:
         b.move()
         b.display()
-   
     if holding > -1:
         blocks[holding].setpos(mouseX-relX,blocks[holding].y)
         if not mp:
@@ -75,25 +86,34 @@ def draw():
             holding = blocks.index(b)
             relX=mouseX-b.x
             relY=mouseY-b.y
- 
     xcom = 0
     ycom = 0
     for b in blocks:
         xcom+=b.x+b.w/2.0
         ycom+=b.y+b.h/2.0
-    xcom/=(1.0*len(blocks))
-    ycom/=(1.0*len(blocks))
+    if(len(blocks)>0):
+        xcom/=(1.0*len(blocks))
+        ycom/=(1.0*len(blocks))
     if(xcom>500):
         textSize(40)
-        text("fail",500,500)
+        fill(0)
+        text("fail",1300,100)
     if(comdisplay):
         fill(255,0,0)
         ellipse(xcom,ycom,10,10)
     if(add):
-        blocks.append(Block(mouseX-100,mouseY-50,200,100,0,0))
-        touching.append(False)
+        bn+=1
+        clear()
+        for i in range(bn):
+            blocks.append(Block(400,600-(i+1)*bh,bw,bh,0,0))
         add = False
-    for i in range(len(touching)):
+    if(sub):
+        bn-=1
+        clear()
+        for i in range(bn):
+            blocks.append(Block(400,600-(i+1)*bh,bw,bh,0,0))
+        sub = False
+    """for i in range(len(touching)):
         touching[i]=False
     for i in range(len(blocks)):
         for j in filter(lambda x: x>i,range(len(blocks))):
@@ -104,23 +124,27 @@ def draw():
                 touching[j]=True
                 #if bli.x+bli.w>blj.x:
                  #   bli.x=blj.x-bli.w
-                """if bli.y+bli.h>blj.y:
-                    blj.y=bli.y+bli.h
+                
+                   # if bli.y+bli.h>blj.y:
+                   # blj.y=bli.y+bli.h
                 if blj.y+blj.h>bli.y:
-                    blj.y=bli.y-blj.h"""
+                    blj.y=bli.y-blj.
                # if blj.x+blj.w>bli.x:
                 #    blj.x=bli.x-blj.w
-                
+"""
 def keyPressed():
     global comdisplay
     global add
     global checkbal
+    global sub
     if(key=='c'):
         comdisplay = True
     if(key=='a'):
         add = True
     if(key=='g'):
         checkbal = True
+    if(key=='s' and len(blocks)>0):
+        sub = True
 def keyReleased():
     global comdisplay
     if(key=='c'):
