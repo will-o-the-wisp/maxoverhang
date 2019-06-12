@@ -23,6 +23,7 @@ class Block:
         self.ax=ax
         self.ay=ay
     def display(self):
+        stroke(0)
         fill(255)
         #if(self.touchRect(0,600,500,50) or touching[blocks.index(self)]):
             #fill(255,0,0)
@@ -66,7 +67,6 @@ def draw():
     global relY
     global mp
     global blocks
-    global blocks2
     global sub
     global bn
     background(190)
@@ -78,9 +78,9 @@ def draw():
         b.move()
         b.display()
     if holding > -1:
-        blocks[holding].setpos(mouseX-relX,blocks[holding].y)
         if not mp:
             holding = -1
+    print(blocks)
     for b in blocks:
         if mp and b.inBlock(mouseX,mouseY) and holding==-1:
             holding = blocks.index(b)
@@ -131,7 +131,7 @@ def draw():
                     blj.y=bli.y-blj.
                # if blj.x+blj.w>bli.x:
                 #    blj.x=bli.x-blj.w
-"""
+        """
 def keyPressed():
     global comdisplay
     global add
