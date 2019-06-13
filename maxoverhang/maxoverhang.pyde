@@ -116,7 +116,7 @@ def draw():
             maxx=b.x
     textSize(40)
     fill(0)
-    text(maxx-400,1200,750)
+    text(str(maxx-400)+"/"+str(harmSum(len(blocks))*bw),1200,750)
     line(harmSum(len(blocks))*bw+500,0,harmSum(len(blocks))*bw+500,height)
     if(comdisplay):
         fill(255,0,0)
