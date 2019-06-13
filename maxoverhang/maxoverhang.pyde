@@ -104,6 +104,15 @@ def draw():
             textSize(40)
             fill(0)
             text("indiv com fail "+str(i),1100,500)
+    maxx=400
+    if(len(blocks)>0):
+        maxx=blocks[0].x
+    for b in blocks:
+        if(b.x>maxx):
+            maxx=b.x
+    textSize(40)
+    fill(0)
+    text(maxx-400,1200,750)
     if(comdisplay):
         fill(255,0,0)
         ellipse(xcom,ycom,10,10)
