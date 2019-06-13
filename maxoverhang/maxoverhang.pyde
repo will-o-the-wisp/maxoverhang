@@ -111,6 +111,14 @@ def draw():
         textSize(40)
         fill(0)
         text("fail",1300,200)
+        text("total com fail",1100,100)
+    for i in range(1,len(blocks)):
+        b=blocks[i]
+        if(b.x+b.w/2.0<=blocks[i-1].x  or b.x+b.w/2.0>=blocks[i-1].x+bw):
+            textSize(40)
+            fill(0)
+            text("indiv com fail",1100,500)
+
     if(comdisplay):
         xcom = 0
         ycom = 0        
