@@ -100,19 +100,24 @@ def draw():
         text("total com fail",1100,100)
     for i in range(1,len(blocks)):
         b=blocks[i]
-        if(b.x+b.w/2.0<=blocks[i-1].x  or b.x+b.w/2.0>=blocks[i-1].x+bw):
+        if(b.x+b.w/2.0<blocks[i-1].x  or b.x+b.w/2.0>blocks[i-1].x+bw):
             textSize(40)
             fill(0)
             text("indiv com fail "+str(i),1100,500)
     maxx=400
     if(len(blocks)>0):
         maxx=blocks[0].x
+        if(blocks[0].x+b.w/2.0>500):
+            textSize(40)
+            fill(0)
+            text("indiv com fail 0",1100, 500)
     for b in blocks:
         if(b.x>maxx):
             maxx=b.x
     textSize(40)
     fill(0)
     text(maxx-400,1200,750)
+    line(harmSum(len(blocks))*bw+500,0,harmSum(len(blocks))*bw+500,height)
     if(comdisplay):
         fill(255,0,0)
         ellipse(xcom,ycom,10,10)
@@ -147,6 +152,12 @@ def draw():
                # if blj.x+blj.w>bli.x:
                 #    blj.x=bli.x-blj.w
         """
+def harmSum(n):
+    sum=0.0
+    for i in range(n):
+        sum+=1/(2.0*(i+1))
+    return sum
+
 def keyPressed():
     global comdisplay
     global add
