@@ -7,6 +7,8 @@ forcedisplay = False
 add = False
 sub = False
 checkbal = False
+showfn = False
+showfg = False
 bw=100
 bh=50
 bn=0
@@ -60,6 +62,8 @@ def setup():
     background(190)
 
 def draw():
+    global showfn
+    global showfg
     global touching
     global add
     global holding
@@ -77,6 +81,8 @@ def draw():
     for b in blocks:
         b.move()
         b.display()
+        arrow(-1,50,b.x+b.w/2,b.y+b.h/2)
+        arrow(1,50*len(blocks),b.x+b.w/2,b.y)
     if holding > -1:
         blocks[holding].setpos(mouseX-relX,blocks[holding].y)
         if not mp:
@@ -114,9 +120,11 @@ def draw():
     for b in blocks:
         if(b.x>maxx):
             maxx=b.x
+    fill(255,0,0)
+    #line(maxx,0,maxx,height)
     textSize(40)
     fill(0)
-    text(str(maxx-400)+"/"+str(harmSum(len(blocks))*bw),1200,750)
+    text(str(int(maxx-400))+"/"+str(harmSum(len(blocks))*bw),1200,750)
     line(harmSum(len(blocks))*bw+500,0,harmSum(len(blocks))*bw+500,height)
     if(comdisplay):
         fill(255,0,0)
@@ -158,6 +166,11 @@ def harmSum(n):
         sum+=1/(2.0*(i+1))
     return sum
 
+def arrow(o,l,x,y):
+    stroke(0,255,0)
+    line(x,y,x,y-l*o)
+    line(x,y-l*o,x+10,(y-l*o)+o*20)
+    line(x,y-l*o,x-10,(y-l*o)+o*20)
 def keyPressed():
     global comdisplay
     global add
