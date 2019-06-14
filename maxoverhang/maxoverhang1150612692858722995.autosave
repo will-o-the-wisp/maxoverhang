@@ -4,7 +4,6 @@ relX=0
 relY=0
 comdisplay = False
 forcedisplay = False
-counter=0
 add = False #adding blocks
 sub = False #subtracting blocks
 checkbal = False #checking com
@@ -23,8 +22,6 @@ class Block:
         self.vy=0
         self.ax=ax
         self.ay=ay
-        cx=self.x+self.w/2.0
-        cy=self.y+self.h/2.0
             
     def display(self):
         stroke(0)
@@ -94,10 +91,6 @@ def draw():
             holding = blocks.index(b)
             relX=mouseX-b.x
             relY=mouseY-b.y
-    xcom = 0
-    ycom = 0
-    for b in blocks:
-        counter = b.x - 400
     for b in blocks:
         xcom+=b.x+b.w/2.0
         ycom+=b.y+b.h/2.0
@@ -118,16 +111,6 @@ def draw():
             textSize(40)
             fill(0)
             text("indiv com fail",1100,500)
-            text("indiv com fail "+str(i),1100,500)
-    maxx=400
-    if(len(blocks)>0):
-        maxx=blocks[0].x
-    for b in blocks:
-        if(b.x>maxx):
-            maxx=b.x
-    textSize(40)
-    fill(0)
-    text(maxx-400,1200,750)
     if(comdisplay):
         xcom = 0
         ycom = 0        
