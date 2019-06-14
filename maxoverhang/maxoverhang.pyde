@@ -114,7 +114,7 @@ def draw():
         text("total com fail",1100,100)
     for i in range(1,len(blocks)):
         b=blocks[i]
-        if(b.x+b.w/2.0<=blocks[i-1].x  or b.x+b.w/2.0>=blocks[i-1].x+bw):
+        if(b.x+b.w/2.0<blocks[i-1].x  or b.x+b.w/2.0>blocks[i-1].x+bw):
             textSize(40)
             fill(0)
             text("indiv com fail",1100,500)
@@ -122,12 +122,17 @@ def draw():
     maxx=400
     if(len(blocks)>0):
         maxx=blocks[0].x
+        if(blocks[0].x+b.w/2.0>500):
+            textSize(40)
+            fill(0)
+            text("indiv com fail 0",1100, 500)
     for b in blocks:
         if(b.x>maxx):
             maxx=b.x
     textSize(40)
     fill(0)
-    text(maxx-400,1200,750)
+    text(str(maxx-400)+"/"+str(harmSum(len(blocks))*bw),1200,750)
+    line(harmSum(len(blocks))*bw+500,0,harmSum(len(blocks))*bw+500,height)
     if(comdisplay):
         xcom = 0
         ycom = 0        
@@ -178,9 +183,17 @@ def draw():
                 #    blj.x=bli.x-blj.w
 
         """
+<<<<<<< HEAD
     textSize(40)
     fill(0)
     text("max overhang:",1000,100)
+=======
+def harmSum(n):
+    sum=0.0
+    for i in range(n):
+        sum+=1/(2.0*(i+1))
+    return sum
+>>>>>>> 55ebb5a25dd9e879f2e86955d1356cc20fdcfa87
 
 def keyPressed():
     global comdisplay
