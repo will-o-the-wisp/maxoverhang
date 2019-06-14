@@ -101,9 +101,6 @@ def draw():
     for b in blocks:
         xcom+=b.x+b.w/2.0
         ycom+=b.y+b.h/2.0
-    if len(blocks)>0:
-        xcom/=(1.0*len(blocks))
-        ycom/=(1.0*len(blocks))
     if(len(blocks)>0):
         xcom/=(1.0*len(blocks))
         ycom/=(1.0*len(blocks))
@@ -139,14 +136,6 @@ def draw():
         for b in blocks:
             xcom+=b.x+b.w/2.0
             ycom+=b.y+b.h/2.0
-            arrow = createShape(GROUP)
-            head = createShape(TRIANGLE, xcom-10, ycom-20, xcom+10, ycom-20, xcom, ycom-30)
-            head.setFill(color(0))
-            body = createShape(RECT, xcom-5, ycom, 7, 20)
-            body.setFill(color(0))
-            arrow.addChild(body)
-            arrow.addChild(head)
-            shape(arrow)
         xcom/=(1.0*len(blocks))
         ycom/=(1.0*len(blocks))
         fill(255,0,0)
@@ -183,17 +172,14 @@ def draw():
                 #    blj.x=bli.x-blj.w
 
         """
-<<<<<<< HEAD
     textSize(40)
     fill(0)
-    text("max overhang:",1000,100)
-=======
+
 def harmSum(n):
     sum=0.0
     for i in range(n):
         sum+=1/(2.0*(i+1))
     return sum
->>>>>>> 55ebb5a25dd9e879f2e86955d1356cc20fdcfa87
 
 def keyPressed():
     global comdisplay
