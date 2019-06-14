@@ -37,6 +37,9 @@ class Block:
         if(comdisplay):
             fill(0)
             ellipse(cx,cy,10,10)
+            textSize(18)
+            fill(255)
+            text("x", cx-5, cy+5)
     def inBlock(self,x,y):
         return (x>=self.x and x<=self.x+self.w and y>=self.y and y<=self.y+self.h)
     def setpos(self,x,y):
@@ -140,6 +143,9 @@ def draw():
         ycom/=(1.0*len(blocks))
         fill(255,0,0)
         ellipse(xcom,ycom,10,10)
+        textSize(18)
+        fill(255)
+        text("x", xcom-5, ycom+5)
     if(add):
         bn+=1
         clear()
@@ -152,26 +158,6 @@ def draw():
         for i in range(bn):
             blocks.append(Block(400,600-(i+1)*bh,bw,bh,0,0))
         sub = False
-    """for i in range(len(touching)):
-        touching[i]=False
-    for i in range(len(blocks)):
-        for j in filter(lambda x: x>i,range(len(blocks))):
-            bli = blocks[i]
-            blj = blocks[j]
-            if bli.touchRect(blj.x,blj.y,blj.w,blj.h):
-                touching[i]=True
-                touching[j]=True
-                #if bli.x+bli.w>blj.x:
-                 #   bli.x=blj.x-bli.w
-                
-                   # if bli.y+bli.h>blj.y:
-                   # blj.y=bli.y+bli.h
-                if blj.y+blj.h>bli.y:
-                    blj.y=bli.y-blj.
-               # if blj.x+blj.w>bli.x:
-                #    blj.x=bli.x-blj.w
-
-        """
     textSize(40)
     fill(0)
 
