@@ -12,6 +12,7 @@ showfg = False
 bw=100
 bh=50
 bn=0
+fail = False
 
 class Block:
     def __init__(self,x,y,w,h,ax,ay):
@@ -72,6 +73,8 @@ def draw():
     global blocks
     global sub
     global bn
+    global fail
+    global checkbal
     background(190)
     fill(101,67,33)
     rect(0,600,500,50)
@@ -80,36 +83,50 @@ def draw():
     for b in blocks:
         b.move()
         b.display()
-        arrow(-1,50,b.x+b.w/2,b.y+b.h/2)
-
+        if(showfg):
+            stroke(0,255,0)
+            arrow(-1,50,b.x+b.w/2.0,b.y+b.h/2.0)
+    if(showfn):
+        stroke(255,0,0)
+        for i in range(maxstack()):
+            bl=blocks[i]
+            if(i==0):
+                if(bl.x+bl.w<=500):
+                    arrow(1,50*maxstack(),bl.x+bl.w/2.0,bl.y+b.h)
+                else:
+                    arrow(1,50*maxstack(),(bl.x+500)/2.0,bl.y+b.h)
+            else:
+                d=blocks[i-1]
+                #if(b.x>=d.x):
+                arrow(1,50*maxstack()-50*(i),(bl.x+d.x+bw)/2.0,bl.y+b.h)
+                #else:
+                   # arrow(1,50*maxstack()-50*(i),,b.y+b.h)
+            
     if holding > -1:
         blocks[holding].setpos(mouseX-relX,blocks[holding].y)
         if not mp:
             holding = -1
     for b in blocks:
         if mp and b.inBlock(mouseX,mouseY) and holding==-1:
+            checkbal = False
             holding = blocks.index(b)
             relX=mouseX-b.x
             relY=mouseY-b.y
-    if(len(blocks)==3):
-        print(calcxcom(0,len(blocks)),blocks[0].x+100,blocks[1].x+100,blocks[2].x+100)
     if(calcxcom(0,len(blocks))>500):
-        textSize(40)
-        fill(0)
-        text("total com fail",1100,100)
+        fail = True
+        if(comdisplay):
+            textSize(40)
+            fill(0)
+            text("total com fail",1100,100)
     for i in range(1,len(blocks)):
         b=blocks[i]
         if(calcxcom(i,len(blocks))<blocks[i-1].x  or calcxcom(i,len(blocks))>blocks[i-1].x+bw):
-            textSize(40)
-            fill(0)
-            text("substack com fail "+str(i),1100,500)
+            fail = True
+            if(comdisplay):
+                textSize(40)
+                fill(0)
+                text("substack com fail",1000,500)
     maxx=400
-    if(len(blocks)>0):
-        maxx=blocks[0].x
-        if(blocks[0].x+b.w/2.0>500):
-            textSize(40)
-            fill(0)
-            text("indiv com fail 0",1100, 500)
     for b in blocks:
         if(b.x>maxx):
             maxx=b.x
@@ -117,21 +134,40 @@ def draw():
     #line(maxx,0,maxx,height)
     textSize(40)
     fill(0)
-    text(str(maxx-400)+"/"+str(harmSum(len(blocks))*bw),1100,750)
+    if(len(blocks)>0):
+        text(str(maxx-400)+"/"+str(int(harmSum(len(blocks))*bw)),1200,750)
+    stroke(0);
     line(harmSum(len(blocks))*bw+500,0,harmSum(len(blocks))*bw+500,height)
+    if(len(blocks)>0):
+        #maxx=blocks[0].x
+        if(blocks[0].x+b.w/2.0>500):
+            fail = True
+            if(comdisplay):
+                textSize(40)
+                fill(0)
+                text("substack com fail",1000, 500)
+    print(fail,checkbal,maxx-400,int(harmSum(len(blocks))*bw)*0.95)
+    if(len(blocks)>0 and checkbal==True and fail == False):
+        if(maxx-400>=int(harmSum(len(blocks))*bw)*0.95):
+            textSize(40)
+            fill(0)
+            text("You win!",800,750)
+    fail = False
     if(comdisplay):
         fill(255,0,0)
         ellipse(calcxcom(0,len(blocks)),calcycom(0,len(blocks)),10,10)
         fill(0,255,0)
-        for i in range(1,len(blocks)):
-            ellipse(calcxcom(i,len(blocks)),calcycom(i,len(blocks)),15,15)
+        #for i in range(1,len(blocks)):
+        #    ellipse(calcxcom(i,len(blocks)),calcycom(i,len(blocks)),15,15)
     if(add):
+        checkbal = False
         bn+=1
         clear()
         for i in range(bn):
             blocks.append(Block(400,600-(i+1)*bh,bw,bh,0,0))
         add = False
     if(sub):
+        checkbal = False
         bn-=1
         clear()
         for i in range(bn):
@@ -144,23 +180,10 @@ def harmSum(n):
     return sum
 
 def arrow(o,l,x,y):
-    stroke(0,255,0)
     line(x,y,x,y-l*o)
     line(x,y-l*o,x+10,(y-l*o)+o*20)
     line(x,y-l*o,x-10,(y-l*o)+o*20)
-def keyPressed():
-    global comdisplay
-    global add
-    global checkbal
-    global sub
-    if(key=='c'):
-        comdisplay = True
-    if(key=='a'):
-        add = True
-    if(key=='g'):
-        checkbal = True
-    if(key=='s' and len(blocks)>0):
-        sub = True
+
 def calcxcom(m,n):
     xcom = 0
     for i in range(m,n):
@@ -175,15 +198,48 @@ def calcycom(m,n):
     if(n-m>0):
         ycom/=(1.0*(n-m))
     return ycom
-def keyReleased():
-    global comdisplay
-    if(key=='c'):
-        comdisplay = False
 
+def maxstack():
+    ans = 1
+    if(len(blocks)==0 or blocks[0].x > 500):
+        return 0
+    for i in range(1,len(blocks)):
+        if((blocks[i].x>=blocks[i-1].x and blocks[i].x<=blocks[i-1].x+bw) or (blocks[i].x+bw>=blocks[i-1].x and blocks[i].x+bw<=blocks[i-1].x+bw)):
+            ans+=1
+        else:
+            return ans
+    return ans
+def keyPressed():
+    global comdisplay
+    global add
+    global checkbal
+    global sub
+    global showfg
+    global showfn
+    if(key=='c' and comdisplay == False):
+        comdisplay = True
+    if(key=='v' and comdisplay == True):
+        comdisplay = False
+    if(key=='a' and len(blocks)<12):
+        add = True
+    if(key == 'l' and comdisplay == False):
+        checkbal = True
+    if(key=='s' and len(blocks)>0):
+        sub = True
+    if(key=='g' and showfg == False):
+        showfg = True
+    if(key=='h' and showfg == True):
+        showfg = False
+    if(key=='n' and showfn == False):
+        showfn = True
+    if(key=='m' and showfn == True):
+        showfn = False
+        
+def keyReleased():
+    pass
 def mousePressed():
     global mp
     mp = True
-
 def mouseReleased():
     global mp
     mp = False
