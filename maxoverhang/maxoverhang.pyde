@@ -4,6 +4,13 @@ relX=0
 relY=0
 comdisplay = False
 forcedisplay = False
+counter=0
+add = False #adding blocks
+sub = False #subtracting blocks
+checkbal = False #checking com
+bw=100 #block width
+bh=50 #block height
+bn=0 #block number
 add = False
 sub = False
 checkbal = False
@@ -24,15 +31,23 @@ class Block:
         self.vy=0
         self.ax=ax
         self.ay=ay
+        cx=self.x+self.w/2.0
+        cy=self.y+self.h/2.0
+            
     def display(self):
         stroke(0)
         fill(255)
         #if(self.touchRect(0,600,500,50) or touching[blocks.index(self)]):
             #fill(255,0,0)
         rect(self.x,self.y,self.w,self.h)
+        cx=self.x+self.w/2.0
+        cy=self.y+self.h/2.0
         if(comdisplay):
             fill(0)
-            ellipse(self.x+self.w/2.0,self.y+self.h/2.0,10,10)
+            ellipse(cx,cy,10,10)
+            textSize(18)
+            fill(255)
+            text("x", cx-5, cy+5)
     def inBlock(self,x,y):
         return (x>=self.x and x<=self.x+self.w and y>=self.y and y<=self.y+self.h)
     def setpos(self,x,y):
@@ -45,17 +60,19 @@ class Block:
         self.y+=self.vy
     def touchRect(self,x,y,w,h):
         return (self.x+self.w>=x and self.x <= x+w and self.y + self.h >= y and self.y <= y + h)
-        
-
 
 blocks = []
 touching = [False,False]
 #block1=blocks[0]
 #block2=blocks[1]
+block3=Block(400,50,200,100,0,0)
+
 #block3=Block(400,50,200,100,0,0)
+
 def clear():
     global blocks
     blocks=[]
+
 
 def setup():
     size(1400,800)
@@ -77,6 +94,7 @@ def draw():
     global checkbal
     background(190)
     fill(101,67,33)
+    noStroke()
     rect(0,600,500,50)
     noStroke()
     rect(400,600,50,300)
@@ -112,6 +130,19 @@ def draw():
             holding = blocks.index(b)
             relX=mouseX-b.x
             relY=mouseY-b.y
+    xcom = 0
+    ycom = 0
+    for b in blocks:
+        counter = b.x - 400
+    for b in blocks:
+        xcom+=b.x+b.w/2.0
+        ycom+=b.y+b.h/2.0
+    if(len(blocks)>0):
+        xcom/=(1.0*len(blocks))
+        ycom/=(1.0*len(blocks))
+    #if(xcom>500):
+    #    if(len(blocks)==3):
+    #        print(calcxcom(0,len(blocks)),blocks[0].x+100,blocks[1].x+100,blocks[2].x+100)
     if(calcxcom(0,len(blocks))>500):
         fail = True
         if(comdisplay):
@@ -146,7 +177,7 @@ def draw():
                 textSize(40)
                 fill(0)
                 text("substack com fail",1000, 500)
-    print(fail,checkbal,maxx-400,int(harmSum(len(blocks))*bw)*0.95)
+    #print(fail,checkbal,maxx-400,int(harmSum(len(blocks))*bw)*0.95)
     if(len(blocks)>0 and checkbal==True and fail == False):
         if(maxx-400>=int(harmSum(len(blocks))*bw)*0.95):
             textSize(40)
@@ -154,7 +185,18 @@ def draw():
             text("You win!",800,750)
     fail = False
     if(comdisplay):
+        xcom = 0
+        ycom = 0        
+        for b in blocks:
+            xcom+=b.x+b.w/2.0
+            ycom+=b.y+b.h/2.0
+        xcom/=(1.0*len(blocks))
+        ycom/=(1.0*len(blocks))
         fill(255,0,0)
+        ellipse(xcom,ycom,10,10)
+        textSize(18)
+        fill(255)
+        text("x", xcom-5, ycom+5)
         ellipse(calcxcom(0,len(blocks)),calcycom(0,len(blocks)),10,10)
         fill(0,255,0)
         #for i in range(1,len(blocks)):
@@ -173,6 +215,9 @@ def draw():
         for i in range(bn):
             blocks.append(Block(400,600-(i+1)*bh,bw,bh,0,0))
         sub = False
+    textSize(40)
+    fill(0)
+
 def harmSum(n):
     sum=0.0
     for i in range(n):
@@ -183,7 +228,6 @@ def arrow(o,l,x,y):
     line(x,y,x,y-l*o)
     line(x,y-l*o,x+10,(y-l*o)+o*20)
     line(x,y-l*o,x-10,(y-l*o)+o*20)
-
 def calcxcom(m,n):
     xcom = 0
     for i in range(m,n):
