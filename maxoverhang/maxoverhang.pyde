@@ -178,11 +178,16 @@ def draw():
                 fill(0)
                 text("substack com fail",1000, 500)
     #print(fail,checkbal,maxx-400,int(harmSum(len(blocks))*bw)*0.95)
-    if(len(blocks)>0 and checkbal==True and fail == False):
-        if(maxx-400>=int(harmSum(len(blocks))*bw)*0.95):
-            textSize(40)
-            fill(0)
-            text("You win!",800,750)
+    if(len(blocks)>0 and checkbal==True):
+        if(fail == False):
+            if(maxx-400>=int(harmSum(len(blocks))*bw)*0.95):
+                textSize(40)
+                fill(0)
+                text("You win!",800,750)
+            else:
+                text("You aren't close enough!",600,750)
+        else:
+            text("The stack is unstable!", 600, 750)
     fail = False
     if(comdisplay):
         xcom = 0
