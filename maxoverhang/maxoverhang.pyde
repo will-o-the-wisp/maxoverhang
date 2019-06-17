@@ -43,11 +43,10 @@ class Block:
         cx=self.x+self.w/2.0
         cy=self.y+self.h/2.0
         if(comdisplay):
-            fill(0)
-            ellipse(cx,cy,10,10)
-            textSize(18)
-            fill(255)
-            text("x", cx-5, cy+5)
+            #ellipse(cx,cy,10,10)
+            drawcom(cx,cy,0)
+            #textSize(18)
+        #    text("x", cx-5, cy+5)
     def inBlock(self,x,y):
         return (x>=self.x and x<=self.x+self.w and y>=self.y and y<=self.y+self.h)
     def setpos(self,x,y):
@@ -198,12 +197,12 @@ def draw():
         xcom/=(1.0*len(blocks))
         ycom/=(1.0*len(blocks))
         fill(255,0,0)
-        ellipse(xcom,ycom,10,10)
-        textSize(18)
-        fill(255)
-        text("x", xcom-5, ycom+5)
-        ellipse(calcxcom(0,len(blocks)),calcycom(0,len(blocks)),10,10)
-        fill(0,255,0)
+        drawcom(xcom,ycom,120)
+       # textSize(18)
+       # fill(255)
+        #text("x", xcom-5, ycom+5)
+        #ellipse(calcxcom(0,len(blocks)),calcycom(0,len(blocks)),10,10)
+        #fill(0,255,0)
         #for i in range(1,len(blocks)):
         #    ellipse(calcxcom(i,len(blocks)),calcycom(i,len(blocks)),15,15)
     if(add):
@@ -247,6 +246,16 @@ def calcycom(m,n):
     if(n-m>0):
         ycom/=(1.0*(n-m))
     return ycom
+
+def drawcom(x,y,c):
+    fill(255)
+    arc(x, y, 14, 14, 0, PI/2.0, PIE)
+    fill(c)
+    arc(x, y, 14, 14, PI/2.0, PI, PIE)
+    fill(255)
+    arc(x, y, 14, 14, PI, PI*1.5, PIE)
+    fill(c)
+    arc(x, y, 14, 14, PI*1.5, 2*PI, PIE)
 
 def maxstack():
     ans = 1
